@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" href="css/shiritori.css" type="text/css">
+        <script src="./js/libs/jquery-1.9.0/jquery.min.js"></script>
+        <script src="./js/shiritori.js"></script>
+        <script type="text/javascript">
+            
+            (function(){
+                var text = "";
+                
+                $(document).ready(function() {
+                    
+                    $("#enter").click(function(){
+                        text = $("#text").val();
+
+                        // 入力不可にする
+                        setInputDisabled(true);
+                        
+                        // 言葉として存在するかチェック
+                        parseJapanese(text, japaneseParsed);
+                    });
+                    
+                    $("#text").keyup(function(){
+                        var message = "";
+                        var text = $("#text").val();
+                        if (/[\u0021-\u007E]/.test(text)) {
+                            message = "ひらがな、カタカナ、漢字で入力してね";
+                        }
+                        setErrorMessage(message);
+                    });
+                    
+                    var players = getPlayers();
+                    if (!players) {
+                        location.href = "players.html";
+                        return;
+                    }
+                    
+                    // 履歴取得
+                    var list = getHistory();
+                    
+                    // プレーヤーを表示
+                    var turn = (list.length % players) + 1;
+                    for (var number = 1; number <= players; number++) {
+                        var cssclass = (number === turn) ? "answerer": "player";
+                        $("#players").append(
+                            "<span class='" + cssclass + "'>" + number + "</span>"
+                        );
+                    }
+                    
+                    // 一つ前の単語を表示
+                    if (list.length > 0) {
+                        var lastWord = list[list.length - 1];
+                        set_last_word(lastWord);
+                        setNextCharacter(getNextCharacter(lastWord.reading));
+                        // 最後の言葉が「ん」で終わってたらしりとり続行不可にする
+                        if (checkHatsuonAtEnd(lastWord.reading)) {
+                            // 入力不可にする
+                            setInputDisabled(true);
+                            // エラーメッセージ表示
+                            setErrorMessage("「ん」ではじまる言葉はないから、もう続けられないよ");
+                            setNextCharacter("");
+                        }
+                    }
+                    
+                });
+
+                function japaneseParsed(parsed) {
+                    
+                    // 入力可能にする
+                    setInputDisabled(false);
+                    
+                    if ((parsed.total_count !== 1) || 
+                        (parsed.filtered_count !== 1) || 
+                        (!parsed.surface) ||
+                        (!parsed.reading)) {
+                        setErrorMessage("しりとりで使える言葉じゃないみたい");
+                        return;
+                    }
+
+                    var list = getHistory();
+                    var word = {text: parsed.surface, reading: parsed.reading};
+                    var nextCharacter = getNextCharacter(word.reading);
+                    
+                    // しりとりになっているかチェック
+                    if (list.length > 0) {
+                        var lastWord = list[list.length - 1];
+                        var result = checkShiritori(lastWord.reading, parsed.reading);
+                        if (!result.result) {
+                            setErrorMessage("「" + result.lastCharacter + "」ではじまる言葉じゃないよ");
+                            return;
+                        }
+                    }
+                    
+                    do {
+                        // 「ん」で終わったら負け
+                        if (checkHatsuonAtEnd(parsed.reading)) {
+                            // 入力不可
+                            setInputDisabled(true);
+                            // エラーメッセージ表示
+                            setErrorMessage("「ん」ではじまる言葉はないから、もう続けられないよ");
+                            nextCharacter = "";
+                            break;
+                        }
+
+                        // すでに出された単語かチェック
+                        var inHistory = checkInHistory(parsed.reading);
+                        if (inHistory) {
+                            setErrorMessage(inHistory.text + "（" + inHistory.reading +"）はもう出たよ");
+                            return;
+                        }
+                    } while(false);
+                    
+                    // 保存
+                    addHistory(list, word);
+                    
+                    set_last_word(word);
+                    setNextCharacter(nextCharacter);
+                    setPlayers(getPlayers(), list.length);
+                    clearText();
+                }
+                
+                function set_last_word(last_word) {
+                    $("#last_word").text(last_word.text + "（" + last_word.reading + "）");
+                }
+                
+                function setNextCharacter(nextCharacter) {
+                    $("#text").attr({placeholder: nextCharacter});
+                }
+                
+                function clearText(){
+                    $("#text").val("");
+                }
+                
+                function setErrorMessage(message){
+                    $("#error").text(message);
+                }
+                
+                function setInputDisabled(disabled) {
+                    if (disabled) {
+                        $("input").attr("disabled", "disabled");
+                    }
+                    else {
+                        $("input").removeAttr("disabled");
+                    }
+                }
+                
+                function setPlayers(players, count) {
+                    var turn = (count % players);
+                    $("#players").children("span")
+                        .each(function(index, element){
+                            var cssclass = (index === turn) ? "answerer" : "player"; 
+                            $(element).removeAttr("class");
+                            $(element).addClass(cssclass);
+                        });
+                }
+                
+            }).call(this);
+            
+        </script>
+    </head>
+    <body>
+        <div>
+            <a href="index.html">新しいしりとりを始める</a>
+        </div>
+        <div id="players"></div>
+        <div id="last_word"></div>
+        <div id="next_character"></div>
+        <div>
+            <input type="text" id="text" autocomplete="off" autocorrect="off" autocapitalize="off" x-webkit-speech>
+        </div>
+        <div id="error"></div>
+        <div>
+            <input type="button" id="enter" value="OK">
+        </div>
+    </body>
+</html>

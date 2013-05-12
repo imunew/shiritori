@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" href="css/shiritori.css" type="text/css">
+        <script src="./js/libs/jquery-1.9.0/jquery.min.js"></script>
+        <script src="./js/shiritori.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                
+                $("#start a").click(function(){
+                    initializeShiritori();
+                    location.href = "players.html";
+                });
+                
+                if (hasHistory()) {
+                    $("#continue").show();
+                }
+            });
+        </script>
+        
+    </head>
+    <body>
+        <div></div>
+        <div id="start">
+            <a href="#">しりとりをはじめる</a>
+        </div>
+        <div id="continue" style="display:none;">
+            <a href="shiritori.html">しりとりのつづきをやる</a>
+        </div>
+    </body>
+</html>

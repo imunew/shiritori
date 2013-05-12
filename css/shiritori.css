@@ -1,0 +1,57 @@
+/* 
+    Document   : shiritori.css
+    Created on : 2013/05/06, 0:13:29
+    Author     : Motohiro
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+a {
+    color: #00008B;
+    text-decoration: none;
+    font-size: 10pt;
+}
+
+a:hover {
+    color: #FFA500;
+    text-decoration: underline;
+}
+
+input, button {
+    font-size: 24pt;
+}
+
+#text {
+    ime-mode: active;
+    -ms-ime-mode: active;
+}
+
+#last_word {
+    font-size: 18pt;
+}
+
+#next_character {
+    font-size: 12pt;
+}
+
+#error {
+    color: #8B0000;
+}
+
+#players span {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    width: 20px;
+    height: 20px;
+    font-size: 10pt;
+}
+
+#players span.answerer {
+    background-color: #505050;
+    color: #FFFFFF;
+}

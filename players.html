@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script src="./js/libs/jquery-1.9.0/jquery.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                var select = $("#players");
+                for (var number = 2; number <= 6; number++) {
+                    select.append($('<option>').html(number).val(number));
+                }
+                
+                $("#start").click(function(){
+                    var players = $("#players").val();
+                    localStorage["shiritori.players"] = players;
+                    location.href = "shiritori.html";
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div></div>
+        <div>
+            <select id="players"></select>
+        </div>
+        <div>
+            <input type="button" id="start" value="しりとりをはじめる">
+        </div>
+    </body>
+</html>
