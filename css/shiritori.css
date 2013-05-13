@@ -64,19 +64,10 @@ input, button {
     font-size: 32pt;
 }
 
-select {
-    -moz-appearance: push-button;
-    -webkit-appearance: push-button;
-    appearance: push-button;
-    padding: 4px;
-    /*border: none;*/
-    font-size: 20pt;
-}
-
 #text {
     ime-mode: active;
     -ms-ime-mode: active;
-    width: 90%;
+    width: 100%;
 }
 
 #last_word {
