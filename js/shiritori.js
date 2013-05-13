@@ -118,6 +118,10 @@ function getPlayers() {
     return parseInt(localStorage["shiritori.players"]);
 }
 
+function setPlayers(players) {
+    localStorage["shiritori.players"] = players;
+}
+
 function initializeShiritori() {
     localStorage.removeItem("shiritori.history");
     localStorage.removeItem("shiritori.players");
