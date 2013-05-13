@@ -76,6 +76,7 @@ select {
 #text {
     ime-mode: active;
     -ms-ime-mode: active;
+    width: 90%;
 }
 
 #last_word {
