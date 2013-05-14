@@ -3,7 +3,7 @@
     <head>
         <title>ブラウザしりとり</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta name="viewport" content="width=device-width; initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />        
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />        
         <link rel="stylesheet" href="css/shiritori.css" type="text/css">
         <script src="./js/libs/jquery-1.9.0/jquery.min.js"></script>
         <script src="./js/shiritori.js"></script>
@@ -12,6 +12,10 @@
                 
                 $("#start a").click(function(){
                     var players = $("#players").val();
+                    if (!players) {
+                        $("#players").focus();
+                        return;
+                    }
                     initializeShiritori();
                     setPlayers(players);
                     location.href = "shiritori.html";
@@ -31,7 +35,7 @@
     </head>
     <body>
         <div>
-            <input type="number" id="players" min="2" max="6">人で
+            <input type="number" id="players" min="2" max="6" step="1" value="2" required autofocus>人で
         </div>
         <div id="start">
             <a href="#" class="css_button">新しくしりとりをはじめる</a>
