@@ -11,14 +11,23 @@
             $(document).ready(function() {
                 
                 $("#start a").click(function(){
-                    var players = $("#players").val();
-                    if (!players) {
+                    var players = parseInt($("#players").val());
+                    if (!(players >= 2 && players <= 9)) {
                         $("#players").focus();
                         return;
                     }
                     initializeShiritori();
                     setPlayers(players);
                     location.href = "shiritori.html";
+                });
+                
+                $("#players").keyup(function(){
+                    var message = "";
+                    var text = $("#players").val();
+                    if (!/[2-9]/.test(text)) {
+                        message = "2〜9の数字を入力してください";
+                    }
+                    setErrorMessage(message);
                 });
                 
                 var players = getPlayers();
@@ -29,14 +38,19 @@
                 if (hasHistory()) {
                     $("#continue").show();
                 }
+                
+                function setErrorMessage(message){
+                    $("#error").text(message);
+                }
             });
         </script>
         
     </head>
     <body>
         <div>
-            <input type="number" id="players" min="2" max="6" step="1" value="2" required autofocus>人で
+            <input type="number" id="players" min="2" max="9" step="1" value="2" required autofocus>人で
         </div>
+        <div id="error"></div>
         <div id="start">
             <a href="#" class="css_button">新しくしりとりをはじめる</a>
         </div>
