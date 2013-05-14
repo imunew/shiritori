@@ -73,6 +73,8 @@
                     // 入力可能にする
                     setInputDisabled(false);
                     
+                    $("#text").focus();
+                    
                     if ((parsed.total_count !== 1) || 
                         (parsed.filtered_count !== 1) || 
                         (!parsed.surface) ||
@@ -170,7 +172,7 @@
         <div id="last_word"></div>
         <div id="next_character"></div>
         <div>
-            <input type="text" id="text" autocomplete="off" autocorrect="off" autocapitalize="off" x-webkit-speech>
+            <input type="text" id="text" autocomplete="off" autocorrect="off" autocapitalize="off" autofocus x-webkit-speech>
         </div>
         <div id="error"></div>
         <div>
