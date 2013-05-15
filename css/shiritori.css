@@ -95,3 +95,18 @@ input, button {
     background-color: #505050;
     color: #FFFFFF;
 }
+
+#history {
+    padding: 10px 5px;
+}
+
+#history table {
+    border-style: none;
+    border-collapse: collapse;
+}
+
+#history td {
+    border: solid #808080 2px;
+    padding: 5px;
+    font-size: 16pt;
+}
