@@ -15,6 +15,12 @@ body {
     margin: 0;
     padding: 0;
     font-family:'ヒラギノ角ゴ Pro W3','Hiragino Kaku Gothic Pro','メイリオ',Meiryo,'ＭＳ Ｐゴシック','MS PGothic',sans-serif;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
 }
 
 .css_button {
@@ -86,7 +92,7 @@ input, button {
 }
 
 .contents {
-    margin: 5px;
+    padding: 5px 10px;
 }
 
 .contents > div {
@@ -100,6 +106,7 @@ input, button {
 }
 
 #last_word {
+    display: inline-block;
     font-size: 18pt;
 }
 
@@ -111,7 +118,12 @@ input, button {
     color: #8B0000;
 }
 
-#players span {
+div#players {
+    display: inline-block;
+    float: right;
+}
+
+div#players span {
     display: inline-block;
     text-align: center;
     vertical-align: middle;
@@ -120,7 +132,7 @@ input, button {
     font-size: 10pt;
 }
 
-#players span.answerer {
+div#players span.answerer {
     background-color: #505050;
     color: #FFFFFF;
 }
