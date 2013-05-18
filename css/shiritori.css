@@ -104,7 +104,7 @@ input, button {
 #input_text {
     ime-mode: active;
     -ms-ime-mode: active;
-    width: 99%;
+    width: 97%;
 }
 
 #last_word {
