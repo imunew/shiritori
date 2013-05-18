@@ -47,15 +47,26 @@
         
     </head>
     <body>
-        <div>
-            <input type="number" id="players" min="2" max="9" step="1" value="2" required autofocus>人で
+        <div class="navigation">
+            <div>
+                <a href="index.html"><img src="image/logo_64.png" width="48" height="48"></a>
+            </div>
+            <div>ブラウザしりとり</div>
+            <div class="right">
+                <a href="history.html" class="css_button small_text">履歴</a>
+            </div>
         </div>
-        <div id="error"></div>
-        <div id="start">
-            <a href="#" class="css_button">新しくしりとりをはじめる</a>
-        </div>
-        <div id="continue" style="display:none;">
-            <a href="shiritori.html" class="css_button">しりとりのつづきをやる</a>
+        <div class="contents">
+            <div>
+                <input type="number" id="players" min="2" max="9" step="1" value="2" required autofocus>人で
+            </div>
+            <div id="error"></div>
+            <div id="start">
+                <a href="#" class="css_button large_text">新しくしりとりをはじめる</a>
+            </div>
+            <div id="continue" style="display:none;">
+                <a href="shiritori.html" class="css_button large_text">しりとりのつづきをやる</a>
+            </div>
         </div>
     </body>
 </html>

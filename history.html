@@ -12,7 +12,6 @@
                 
                 var history = getHistory();
                 if (history.length > 0) {
-                    $("#continue").show();
                     $("#history").show();
                     var table = $("#history table");
                     var players = getPlayers();
@@ -21,9 +20,11 @@
                         var value = history[key];
                         var number = parseInt(key) + 1;
                         var player = (key % players) + 1;
+                        var reading = "<div class='reading'>" + value.reading + "</div>";
+                        var text = "<div class='text'>" + value.text + "</div>";
                         tr.append("<td>" + number + "</td>");
                         tr.append("<td>" + player + "</td>");
-                        tr.append("<td>" + value.text + "（" + value.reading + "）</td>");
+                        tr.append("<td>" + reading + text + "</td>");
                         table.append(tr);
                     }
                 }
@@ -32,11 +33,19 @@
         
     </head>
     <body>
-        <div id="continue" style="display:none;">
-            <a href="shiritori.html">しりとり</a>
+        <div class="navigation">
+            <div>
+                <a href="index.html"><img src="image/logo_48.png" width="48" height="48"></a>
+            </div>
+            <div>ブラウザしりとり</div>
+            <div class="right">
+                <a href="shiritori.html" class="css_button small_text">しりとり</a>
+            </div>
         </div>
-        <div id="history" style="display:none;">
-            <table></table>
+        <div class="contents">
+            <div id="history" style="display:none;">
+                <table></table>
+            </div>
         </div>
     </body>
 </html>

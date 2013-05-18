@@ -15,7 +15,7 @@
                 $(document).ready(function() {
                     
                     $("#enter").click(function(){
-                        text = $("#text").val();
+                        text = $("#input_text").val();
 
                         // 入力不可にする
                         setInputDisabled(true);
@@ -24,9 +24,9 @@
                         parseJapanese(text, japaneseParsed);
                     });
                     
-                    $("#text").keyup(function(){
+                    $("#input_text").keyup(function(){
                         var message = "";
-                        var text = $("#text").val();
+                        var text = $("#input_text").val();
                         if (/[\u0021-\u007E]/.test(text)) {
                             message = "ひらがな、カタカナ、漢字で入力してね";
                         }
@@ -73,7 +73,7 @@
                     // 入力可能にする
                     setInputDisabled(false);
                     
-                    $("#text").focus();
+                    $("#input_text").focus();
                     
                     if ((parsed.total_count !== 1) || 
                         (parsed.filtered_count !== 1) || 
@@ -126,15 +126,16 @@
                 }
                 
                 function set_last_word(last_word) {
-                    $("#last_word").text(last_word.text + "（" + last_word.reading + "）");
+                    $("#last_word .reading").text(last_word.reading);
+                    $("#last_word .text").text(last_word.text);
                 }
                 
                 function setNextCharacter(nextCharacter) {
-                    $("#text").attr({placeholder: nextCharacter});
+                    $("#input_text").attr({placeholder: nextCharacter});
                 }
                 
                 function clearText(){
-                    $("#text").val("");
+                    $("#input_text").val("");
                 }
                 
                 function setErrorMessage(message){
@@ -165,19 +166,29 @@
         </script>
     </head>
     <body>
-        <div>
-            <a href="index.html">メニュー</a>
-            &nbsp;<a href="history.html">履歴</a>
+        <div class="navigation">
+            <div>
+                <a href="index.html"><img src="image/logo_64.png" width="48" height="48"></a>
+            </div>
+            <div>ブラウザしりとり</div>
+            <div class="right">
+                <a href="history.html" class="css_button small_text">履歴</a>
+            </div>
         </div>
-        <div id="players"></div>
-        <div id="last_word"></div>
-        <div id="next_character"></div>
-        <div>
-            <input type="text" id="text" autocomplete="off" autocorrect="off" autocapitalize="off" autofocus x-webkit-speech>
-        </div>
-        <div id="error"></div>
-        <div>
-            <a href="#" id="enter" class="css_button">OK</a>
+        <div class="contents">
+            <div id="players"></div>
+            <div id="last_word">
+                <div class="reading"></div>
+                <div class="text"></div>
+            </div>
+            <div id="next_character"></div>
+            <div>
+                <input type="text" id="input_text" autocomplete="off" autocorrect="off" autocapitalize="off" autofocus x-webkit-speech>
+            </div>
+            <div id="error"></div>
+            <div>
+                <a href="#" id="enter" class="css_button large_text">OK</a>
+            </div>
         </div>
     </body>
 </html>
