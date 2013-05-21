@@ -32,13 +32,6 @@
                     setErrorMessage(message);
                 });
                 
-                // iPhone/iPadの場合は、touchmove無効
-                if (navigator.userAgent.search(/iPhone|iPad/) !== -1) {
-                    $(document).bind('touchmove', function(e) {
-                        e.preventDefault();
-                    });
-                }
-                
                 var players = getPlayers();
                 if (players > 0) {
                     $("#players").val(players);

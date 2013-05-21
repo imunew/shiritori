@@ -12,13 +12,6 @@
         <script type="text/javascript">
             $(document).ready(function() {
                 
-                // iPhone/iPadの場合は、touchmove無効
-                if (navigator.userAgent.search(/iPhone|iPad/) !== -1) {
-                    $(document).bind('touchmove', function(e) {
-                        e.preventDefault();
-                    });
-                }
-                
                 var history = getHistory();
                 if (history.length > 0) {
                     $("#history").show();
