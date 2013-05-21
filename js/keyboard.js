@@ -34,6 +34,8 @@ SoftKeyBoard.prototype = {
     
     create: function () {
         var table = document.createElement("TABLE");
+        table.setAttribute("border", "0");
+        table.setAttribute("cellpadding", "0");
         
         for (var rowIndex in this.keys) {
             var row = this.keys[rowIndex];
