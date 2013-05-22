@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="css/shiritori.css" type="text/css">
         <link rel="stylesheet" href="css/keyboard.css" type="text/css">
         <script src="./js/libs/jquery-1.9.0/jquery.min.js"></script>
+        <script src="./js/libs/kanaxs/kana-1.0.6-min.js"></script>
         <script src="./js/shiritori.js"></script>
         <script src="./js/keyboard.js"></script>
         <script type="text/javascript">
@@ -85,6 +86,9 @@
                         setErrorMessage("しりとりで使える言葉じゃないみたい");
                         return;
                     }
+                    
+                    // カタカナで入力した場合に、読みがカタカナでかえってくるケースがあるので、ひらがなに統一する
+                    parsed.reading = parsed.reading.toHiraganaCase();
 
                     var list = getHistory();
                     var word = {text: parsed.surface, reading: parsed.reading};
@@ -134,7 +138,7 @@
                 }
                 
                 function setNextCharacter(nextCharacter) {
-                    $("#input_text").attr({placeholder: nextCharacter});
+                    $("#input_text").attr({placeholder: nextCharacter.toKatakanaCase()});
                 }
                 
                 function clearText(){

@@ -44,6 +44,7 @@ SoftKeyBoard.prototype = {
                 var cell = row[cellIndex];
                 var td = document.createElement("TD");
                 var text = document.createTextNode(cell);
+                td.setAttribute("align", "center");
                 if (cell && cell.length) {
                     var a = document.createElement("A");
                     a.setAttribute("href", "#");
