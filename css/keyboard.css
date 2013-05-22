@@ -22,6 +22,7 @@
  	box-shadow:inset 1px 1px 0px 0px #ffffff;
         width: 75%;
         text-align: center;
+        margin: 5px 5px;
 }.css_softkey:hover {
 	background:-webkit-gradient( linear, left top, left bottom, color-stop(5%, #e9e9e9), color-stop(100%, #f9f9f9) );
 	background:-moz-linear-gradient( center top, #e9e9e9 5%, #f9f9f9 100% );
