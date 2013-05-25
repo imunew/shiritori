@@ -114,6 +114,11 @@ function hasHistory() {
     return (typeof(localStorage["shiritori.history"]) === "string");
 }
 
+function popHistory(list) {
+    list.pop();
+    localStorage["shiritori.history"] = JSON.stringify(list);
+}
+
 function getPlayers() {
     return parseInt(localStorage["shiritori.players"]);
 }

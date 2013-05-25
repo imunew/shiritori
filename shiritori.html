@@ -37,6 +37,16 @@
                         setErrorMessage(message);
                     });
                     
+                    $("#close_button a.css_button").click(function(){
+                        var list = getHistory();
+                        popHistory(list);
+                        var lastWord = list[list.length - 1];
+                        setLastWord(lastWord);
+                        setNextCharacter(getNextCharacter(lastWord.reading));
+                        // 「ん」で終わったら負け
+                        checkGameOver(lastWord.reading);
+                    });
+                    
                     var players = getPlayers();
                     if (!players) {
                         location.href = "index.html";
@@ -58,14 +68,11 @@
                     // 一つ前の単語を表示
                     if (list.length > 0) {
                         var lastWord = list[list.length - 1];
-                        set_last_word(lastWord);
+                        setLastWord(lastWord);
                         setNextCharacter(getNextCharacter(lastWord.reading));
                         // 最後の言葉が「ん」で終わってたらしりとり続行不可にする
-                        if (checkHatsuonAtEnd(lastWord.reading)) {
-                            // 入力不可にする
-                            setInputDisabled(true);
-                            // エラーメッセージ表示
-                            setErrorMessage("「ん」ではじまる言葉はないから、もう続けられないよ");
+                        // 「ん」で終わったら負け
+                        if (checkGameOver(lastWord.reading)) {
                             setNextCharacter("");
                         }
                     }
@@ -97,7 +104,7 @@
                     // しりとりになっているかチェック
                     if (list.length > 0) {
                         var lastWord = list[list.length - 1];
-                        var result = checkShiritori(lastWord.reading, parsed.reading);
+                        var result = checkShiritori(lastWord.reading, word.reading);
                         if (!result.result) {
                             setErrorMessage("「" + result.lastCharacter + "」ではじまる言葉じゃないよ");
                             return;
@@ -106,17 +113,13 @@
                     
                     do {
                         // 「ん」で終わったら負け
-                        if (checkHatsuonAtEnd(parsed.reading)) {
-                            // 入力不可
-                            setInputDisabled(true);
-                            // エラーメッセージ表示
-                            setErrorMessage("「ん」ではじまる言葉はないから、もう続けられないよ");
+                        if (checkGameOver(word.reading)) {
                             nextCharacter = "";
                             break;
                         }
 
                         // すでに出された単語かチェック
-                        var inHistory = checkInHistory(parsed.reading);
+                        var inHistory = checkInHistory(word.reading);
                         if (inHistory) {
                             setErrorMessage(inHistory.text + "（" + inHistory.reading +"）はもう出たよ");
                             return;
@@ -126,13 +129,13 @@
                     // 保存
                     addHistory(list, word);
                     
-                    set_last_word(word);
+                    setLastWord(word);
                     setNextCharacter(nextCharacter);
                     setPlayers(getPlayers(), list.length);
                     clearText();
                 }
                 
-                function set_last_word(last_word) {
+                function setLastWord(last_word) {
                     $("#last_word .reading").text(last_word.reading);
                     $("#last_word .text").text(last_word.text);
                 }
@@ -152,9 +155,13 @@
                 function setInputDisabled(disabled) {
                     if (disabled) {
                         $("input").attr("disabled", "disabled");
+                        $("#enter").hide();
+                        $("#soft_keyboard").hide();
                     }
                     else {
                         $("input").removeAttr("disabled");
+                        $("#enter").show();
+                        $("#soft_keyboard").show();
                     }
                 }
                 
@@ -166,6 +173,16 @@
                             $(element).removeAttr("class");
                             $(element).addClass(cssclass);
                         });
+                }
+                
+                function checkGameOver(reading) {
+                    // 「ん」で終わったら負け
+                    var isGameOver = checkHatsuonAtEnd(reading);
+                    // 入力不可
+                    setInputDisabled(isGameOver);
+                    // エラーメッセージ表示
+                    setErrorMessage(isGameOver ? "「ん」ではじまる言葉はないから、もう続けられないよ": "");
+                    return isGameOver;
                 }
                 
             }).call(this);
@@ -187,6 +204,9 @@
                 <div id="last_word">
                     <div class="reading"></div>
                     <div class="text"></div>
+                </div>
+                <div id="close_button">
+                    <a href="#" class="css_button">×</a>
                 </div>
                 <div id="players"></div>
             </div>

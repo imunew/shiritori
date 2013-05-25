@@ -58,6 +58,16 @@ body {
     top:1px;
 }
 
+div#close_button {
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 12px;
+}
+
+#close_button a {
+    padding:0px 4px;
+}
+
 input, button {
     font-size: 32px;
     vertical-align: middle;
