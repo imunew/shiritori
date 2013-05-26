@@ -16,6 +16,8 @@
             
             (function(){
                 
+                var keyboard = new SoftKeyBoard();
+                
                 $(document).ready(function() {
                     
                     $("#enter").click(function(){
@@ -44,6 +46,23 @@
                         updateLastWord(list);
                     });
                     
+                    $("#input_type select").change(function(event){
+                        var inputType = parseInt($(event.target).val());
+                        setInputType(inputType);
+                        $("#soft_keyboard").children("table").remove();
+                        if (inputType === INPUT_TYPE_HIRAGANA || inputType === INPUT_TYPE_KATAKANA) {
+                            createSoftKeyBoard(inputType);
+                            $("#input_text").attr("readonly", "readonly");
+                        } else {
+                            $("#input_text").removeAttr("readonly");
+                        }
+                        var list = getHistory();
+                        if (list.length > 0) {
+                            var lastWord = list[list.length - 1];
+                            setNextCharacter(getNextCharacter(lastWord.reading));
+                        }
+                    });
+                    
                     var players = getPlayers();
                     if (!players) {
                         location.href = "index.html";
@@ -65,17 +84,15 @@
                     // 最後の単語を表示
                     updateLastWord(list);
                     
-                    // softkeyboard
-                    var keyboard = new SoftKeyBoard();
-                    var table = keyboard.create();
-                    $("#soft_keyboard").append(table);
-                    $("#soft_keyboard .css_softkey").mouseup(function(event){
-                        var key = event.target.firstChild.nodeValue;
-                        var text = $("#input_text").val();
-                        text = keyboard.inputKey(text, key);
-                        $("#input_text").val(text);
-                        $("#error").text("");
-                    });
+                    var inputType = getInputType();
+                    $("#input_type select").val(inputType);
+                    if (inputType === INPUT_TYPE_HIRAGANA || inputType === INPUT_TYPE_KATAKANA) {
+                        // softkeyboard
+                        createSoftKeyBoard(inputType);
+                        $("#input_text").attr("readonly", "readonly");
+                    } else {
+                        $("#input_text").removeAttr("readonly");
+                    }
                 });
 
                 function japaneseParsed(parsed) {
@@ -102,7 +119,7 @@
                         var lastWord = list[list.length - 1];
                         var result = checkShiritori(lastWord.reading, word.reading);
                         if (!result.result) {
-                            setErrorMessage("「" + result.lastCharacter.toKatakanaCase() + "」ではじまる言葉じゃないよ");
+                            setErrorMessage("「" + changeByInputType(result.lastCharacter) + "」ではじまる言葉じゃないよ");
                             return;
                         }
                     }
@@ -136,7 +153,7 @@
                 }
                 
                 function setNextCharacter(nextCharacter) {
-                    $("#input_text").attr({placeholder: nextCharacter.toKatakanaCase()});
+                    $("#input_text").attr({placeholder: changeByInputType(nextCharacter)});
                 }
                 
                 function updateLastWord(list) {
@@ -167,8 +184,7 @@
                         $("input").attr("disabled", "disabled");
                         $("#enter").hide();
                         $("#soft_keyboard").hide();
-                    }
-                    else {
+                    } else {
                         $("input").removeAttr("disabled");
                         $("#enter").show();
                         $("#soft_keyboard").show();
@@ -193,6 +209,30 @@
                     // エラーメッセージ表示
                     setErrorMessage(isGameOver ? "「ん」ではじまる言葉はないから、もう続けられないよ": "");
                     return isGameOver;
+                }
+                
+                function createSoftKeyBoard(inputType) {
+                    keyboard.setInputType(inputType);
+                    var table = keyboard.create();
+                    $("#soft_keyboard").append(table);
+                    $("#soft_keyboard .css_softkey").mouseup(function(event){
+                        var key = event.target.firstChild.nodeValue;
+                        var text = $("#input_text").val();
+                        text = keyboard.inputKey(text, key);
+                        $("#input_text").val(text);
+                        $("#error").text("");
+                    });
+                }
+                
+                function changeByInputType(text){
+                    var inputType = getInputType();
+                    switch (inputType) {
+                        case INPUT_TYPE_HIRAGANA:
+                            return text.toHiraganaCase();
+                        case INPUT_TYPE_KATAKANA:
+                            return text.toKatakanaCase();
+                    }
+                    return text;
                 }
                 
             }).call(this);
@@ -222,16 +262,21 @@
             </div>
             <div id="next_character"></div>
             <div>
-                <!--
-                <input type="text" id="input_text" autocomplete="off" autocorrect="off" autocapitalize="off" autofocus x-webkit-speech>
-                -->
-                <input type="text" id="input_text" readonly>
+                <input type="text" id="input_text" readonly autocomplete="off" autocorrect="off" autocapitalize="off" autofocus x-webkit-speech>
             </div>
             <div id="error"></div>
             <div>
                 <a href="#" id="enter" class="css_button large_text">OK</a>
             </div>
-            <div id="soft_keyboard"></div>
+            <div id="soft_keyboard">
+                <div id="input_type">
+                    <select>
+                        <option value="0">ひらがな</option>
+                        <option value="1">カタカナ</option>
+                        <option value="2">直接入力する</option>
+                    </select>
+                </div>
+            </div>
         </div>
     </body>
 </html>

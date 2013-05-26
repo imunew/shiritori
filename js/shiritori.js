@@ -127,9 +127,18 @@ function setPlayers(players) {
     localStorage["shiritori.players"] = players;
 }
 
+function getInputType() {
+    return parseInt(localStorage["shiritori.input_type"] ? localStorage["shiritori.input_type"] : 0);
+}
+
+function setInputType(inputType) {
+    localStorage["shiritori.input_type"] = inputType;
+}
+
 function initializeShiritori() {
     localStorage.removeItem("shiritori.history");
     localStorage.removeItem("shiritori.players");
+    localStorage.removeItem("shiritori.input_type");
 }
 
 function getVowel(character){

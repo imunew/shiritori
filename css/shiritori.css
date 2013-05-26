@@ -1,10 +1,3 @@
-/* 
-    Document   : shiritori.css
-    Created on : 2013/05/06, 0:13:29
-    Author     : Motohiro
-    Description:
-        Purpose of the stylesheet follows.
-*/
 
 root { 
     display: block;
@@ -22,6 +15,7 @@ body {
     -ms-user-select: none;
     -webkit-user-drag: none;
     -khtml-user-drag: none;
+    -webkit-touch-callout:none;
 }
 
 .css_button {
@@ -146,6 +140,15 @@ div#players span {
 div#players span.answerer {
     background-color: #505050;
     color: #FFFFFF;
+}
+
+div#input_type {
+    text-align: right;
+    margin-bottom: 5px;
+}
+
+div#input_type select {
+    font-size: 36px;
 }
 
 #history {
