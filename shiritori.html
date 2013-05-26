@@ -37,14 +37,11 @@
                         setErrorMessage(message);
                     });
                     
-                    $("#close_button a.css_button").click(function(){
+                    $("#cancel_button a.css_button").click(function(){
                         var list = getHistory();
                         popHistory(list);
-                        var lastWord = list[list.length - 1];
-                        setLastWord(lastWord);
-                        setNextCharacter(getNextCharacter(lastWord.reading));
-                        // 「ん」で終わったら負け
-                        checkGameOver(lastWord.reading);
+                        // 最後の単語を表示
+                        updateLastWord(list);
                     });
                     
                     var players = getPlayers();
@@ -65,26 +62,14 @@
                         );
                     }
                     
-                    // 一つ前の単語を表示
-                    if (list.length > 0) {
-                        var lastWord = list[list.length - 1];
-                        setLastWord(lastWord);
-                        setNextCharacter(getNextCharacter(lastWord.reading));
-                        // 最後の言葉が「ん」で終わってたらしりとり続行不可にする
-                        // 「ん」で終わったら負け
-                        if (checkGameOver(lastWord.reading)) {
-                            setNextCharacter("");
-                        }
-                    }
-                    
+                    // 最後の単語を表示
+                    updateLastWord(list);
                 });
 
                 function japaneseParsed(parsed) {
                     
                     // 入力可能にする
                     setInputDisabled(false);
-                    
-                    $("#input_text").focus();
                     
                     if ((parsed.total_count !== 1) || 
                         (parsed.filtered_count !== 1) || 
@@ -99,7 +84,6 @@
 
                     var list = getHistory();
                     var word = {text: parsed.surface, reading: parsed.reading};
-                    var nextCharacter = getNextCharacter(word.reading);
                     
                     // しりとりになっているかチェック
                     if (list.length > 0) {
@@ -111,37 +95,51 @@
                         }
                     }
                     
-                    do {
-                        // 「ん」で終わったら負け
-                        if (checkGameOver(word.reading)) {
-                            nextCharacter = "";
-                            break;
-                        }
-
-                        // すでに出された単語かチェック
-                        var inHistory = checkInHistory(word.reading);
-                        if (inHistory) {
-                            setErrorMessage(inHistory.text + "（" + inHistory.reading +"）はもう出たよ");
-                            return;
-                        }
-                    } while(false);
+                    // すでに出された単語かチェック
+                    var inHistory = checkInHistory(word.reading);
+                    if (inHistory) {
+                        setErrorMessage(inHistory.text + "（" + inHistory.reading +"）はもう出たよ");
+                        return;
+                    }
                     
                     // 保存
                     addHistory(list, word);
                     
-                    setLastWord(word);
-                    setNextCharacter(nextCharacter);
+                    // 最後の単語を表示
+                    updateLastWord(list);
+
+                    // プレーヤーの順番を更新
                     setPlayers(getPlayers(), list.length);
                     clearText();
                 }
                 
-                function setLastWord(last_word) {
-                    $("#last_word .reading").text(last_word.reading);
-                    $("#last_word .text").text(last_word.text);
+                function setLastWord(lastWord) {
+                    $("#last_word .reading").text(lastWord.reading);
+                    $("#last_word .text").text(lastWord.text);
+                    if (lastWord.reading && lastWord.text) {
+                        $("#cancel_button").show();
+                        return;
+                    }
+                    $("#cancel_button").hide();
                 }
                 
                 function setNextCharacter(nextCharacter) {
                     $("#input_text").attr({placeholder: nextCharacter.toKatakanaCase()});
+                }
+                
+                function updateLastWord(list) {
+                    // 一つ前の単語を表示
+                    var lastWord = {reading:"",text:""};
+                    var nextCharacter = "";
+                    if (list.length > 0) {
+                        lastWord = list[list.length - 1];
+                        // 最後の言葉が「ん」で終わってたらしりとり続行不可にする
+                        if (!checkGameOver(lastWord.reading)) {
+                            nextCharacter = getNextCharacter(lastWord.reading);
+                        }
+                    }
+                    setLastWord(lastWord);
+                    setNextCharacter(nextCharacter);
                 }
                 
                 function clearText(){
@@ -205,7 +203,7 @@
                     <div class="reading"></div>
                     <div class="text"></div>
                 </div>
-                <div id="close_button">
+                <div id="cancel_button">
                     <a href="#" class="css_button">×</a>
                 </div>
                 <div id="players"></div>
@@ -233,6 +231,15 @@
                     function onSoftKeyPressed(key) {
                         var text = $("#input_text").val();
                         text = keyboard.inputKey(text, key);
+                        $("#input_text").val(text);
+                        $("#error").text("");
+                    }
+                </script>
+            </div>
+        </div>
+    </body>
+</html>
+
                         $("#input_text").val(text);
                         $("#error").text("");
                     }
