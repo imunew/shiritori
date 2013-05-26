@@ -64,6 +64,18 @@
                     
                     // 最後の単語を表示
                     updateLastWord(list);
+                    
+                    // softkeyboard
+                    var keyboard = new SoftKeyBoard();
+                    var table = keyboard.create();
+                    $("#soft_keyboard").append(table);
+                    $("#soft_keyboard .css_softkey").mouseup(function(event){
+                        var key = event.target.firstChild.nodeValue;
+                        var text = $("#input_text").val();
+                        text = keyboard.inputKey(text, key);
+                        $("#input_text").val(text);
+                        $("#error").text("");
+                    });
                 });
 
                 function japaneseParsed(parsed) {
@@ -90,7 +102,7 @@
                         var lastWord = list[list.length - 1];
                         var result = checkShiritori(lastWord.reading, word.reading);
                         if (!result.result) {
-                            setErrorMessage("「" + result.lastCharacter + "」ではじまる言葉じゃないよ");
+                            setErrorMessage("「" + result.lastCharacter.toKatakanaCase() + "」ではじまる言葉じゃないよ");
                             return;
                         }
                     }
@@ -219,32 +231,7 @@
             <div>
                 <a href="#" id="enter" class="css_button large_text">OK</a>
             </div>
-            <div id="soft_keyboard">
-                <script type="text/javascript">
-                    // softkeyboard
-                    var keyboard = new SoftKeyBoard({
-                        onSoftKeyPressed: "onSoftKeyPressed"
-                    });
-                    var table = keyboard.create();
-                    $("#soft_keyboard").append(table);
-
-                    function onSoftKeyPressed(key) {
-                        var text = $("#input_text").val();
-                        text = keyboard.inputKey(text, key);
-                        $("#input_text").val(text);
-                        $("#error").text("");
-                    }
-                </script>
-            </div>
-        </div>
-    </body>
-</html>
-
-                        $("#input_text").val(text);
-                        $("#error").text("");
-                    }
-                </script>
-            </div>
+            <div id="soft_keyboard"></div>
         </div>
     </body>
 </html>

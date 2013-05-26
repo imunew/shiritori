@@ -8,10 +8,9 @@ var katakana = [
     ["", "", "", "", "", "小", "゛", "゜", "ー", "Ｘ"]
 ];
 
-var SoftKeyBoard = function (params) {
-    if (!params.keys) { params.keys = katakana; }
-    this.keys = params.keys;
-    this.onSoftKeyPressed = params.onSoftKeyPressed;
+var SoftKeyBoard = function () {
+    this.keys = katakana;
+    //this.onSoftKeyPressed = params.onSoftKeyPressed;
 };
 
 SoftKeyBoard.prototype = {
@@ -48,10 +47,7 @@ SoftKeyBoard.prototype = {
                 if (cell && cell.length) {
                     var a = document.createElement("A");
                     a.setAttribute("href", "#");
-                    if (this.onSoftKeyPressed) {
-                        a.setAttribute("class", "css_softkey");
-                        a.setAttribute("onmouseup", this.onSoftKeyPressed + "(this.firstChild.nodeValue);return false;");
-                    }
+                    a.setAttribute("class", "css_softkey");
                     a.appendChild(text);
                     td.appendChild(a);
                 }
