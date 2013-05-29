@@ -27,13 +27,20 @@ function getNextCharacter(lastText) {
     return nextCharacter;
 }
 
-function parseJapanese(text, callback) {
+function parseJapanese(text, success, error) {
     
     var url = "http://api-imunew.rhcloud.com/jlp.php";
     var parameters = {
         "sentence": text
     };
-    $.get(url, parameters, function(data){
+    var request = $.ajax({
+        url: url, 
+        type: "GET",
+        data: parameters,
+        dataType: "html"
+    });
+    
+    request.done(function(data){
         var ma_result = $(data).find("ma_result");
         var total_count = ma_result.find("total_count").text();
         var filtered_count = ma_result.find("filtered_count").text();
@@ -54,8 +61,13 @@ function parseJapanese(text, callback) {
             "reading": reading,
             "pos": pos
         };
-        callback(result);
+        success(result);
     });
+    
+    request.fail(function(/*XMLHttpRequest, textStatus, errorThrown*/){
+        error();
+    });
+    
 }
 
 function checkShiritori(lastText, currentText){

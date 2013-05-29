@@ -27,7 +27,7 @@
                         setInputDisabled(true);
                         
                         // 言葉として存在するかチェック
-                        parseJapanese(text, japaneseParsed);
+                        parseJapanese(text, parseSuccess, parseError);
                     });
                     
                     $("#input_text").keyup(function(){
@@ -95,7 +95,7 @@
                     }
                 });
 
-                function japaneseParsed(parsed) {
+                function parseSuccess(parsed) {
                     
                     // 入力可能にする
                     setInputDisabled(false);
@@ -140,6 +140,14 @@
                     // プレーヤーの順番を更新
                     setPlayers(getPlayers(), list.length);
                     clearText();
+                }
+                
+                function parseError() {
+                    // エラーメッセージ表示
+                    setErrorMessage("通信に失敗しました");
+                    
+                    // 入力可能にする
+                    setInputDisabled(false);
                 }
                 
                 function setLastWord(lastWord) {
