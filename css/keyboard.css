@@ -20,7 +20,7 @@
  	-webkit-box-shadow:inset 1px 1px 0px 0px #ffffff;
  	-moz-box-shadow:inset 1px 1px 0px 0px #ffffff;
  	box-shadow:inset 1px 1px 0px 0px #ffffff;
-        width: 75%;
+        width: 85%;
         text-align: center;
         margin: 4px 1px;
 }.css_softkey:hover {
@@ -36,4 +36,6 @@
 
 div#soft_keyboard table {
     width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
 }
